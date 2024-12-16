@@ -100,5 +100,4 @@ public class Ride {
     public List<Visitor> getRideHistory() {
         return rideHistory;
     }
-
 }
