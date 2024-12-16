@@ -1,4 +1,5 @@
 
+import java.io.*;
 import java.util.*;
 
 public class Ride {
@@ -73,6 +74,22 @@ public class Ride {
         System.out.println("Queue:");
         for (Visitor visitor : queue) {
             System.out.println(visitor);
+        }
+    }
+
+    // 将游客历史记录导出到文件
+    public void exportRideHistory(String filename) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            // 遍历历史记录，写入每个游客信息
+            for (Visitor visitor : rideHistory) {
+                // 将游客的详细信息以逗号分隔写入文件
+                writer.write(visitor.getName() + "," + visitor.getAge() + "," + visitor.getGender()
+                        + "," + visitor.getTicketType() + "," + visitor.getVisitDate());
+                writer.newLine(); // 每个游客信息占一行
+            }
+            System.out.println("Ride history successfully exported to " + filename);
+        } catch (IOException e) {
+            System.out.println("Error exporting ride history: " + e.getMessage());
         }
     }
 
