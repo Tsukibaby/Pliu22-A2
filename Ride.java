@@ -4,10 +4,11 @@ import java.util.*;
 public class Ride {
 
     private final String rideName;          // rideName 应该是不可变的
-    private final int maxRiders;            // maxRiders 应该是不可变的
+    private final int maxRiders;            // maxRiders 每个周期最大游客数
     private final Employee rideOperator;    // rideOperator 不会变化，可以设置为 final
     private final Queue<Visitor> queue;     // queue 应该是不可变的
     private final List<Visitor> rideHistory; // rideHistory 应该是不可变的
+    private int numOfCycles = 0;            // 游乐设施已运行的周期数
 
     // 构造函数
     public Ride(String rideName, int maxRiders, Employee rideOperator) {
@@ -20,7 +21,7 @@ public class Ride {
 
     // 添加游客到队列
     public void addVisitorToQueue(Visitor visitor) {
-        if (queue.size() < maxRiders) {
+        if (queue.size() < maxRiders * 2) {  // 最大队列容量，可以根据实际需求调整
             queue.add(visitor);
             System.out.println(visitor.getName() + " added to the queue.");
         } else {
@@ -34,50 +35,45 @@ public class Ride {
         System.out.println(visitor.getName() + " has taken the ride and added to history.");
     }
 
-    // 检查游客是否在历史记录中
-    public boolean checkVisitorFromHistory(Visitor visitor) {
-        return rideHistory.contains(visitor);
-    }
+    // 运行一个周期：游客从队列中移出并进入历史
+    public void runOneCycle() {
+        // 检查是否有操作员和游客
+        if (rideOperator == null) {
+            System.out.println("Cannot run the ride. No ride operator assigned.");
+            return;
+        }
 
-    // 获取历史记录中的游客数量
-    public int numberOfVisitors() {
-        return rideHistory.size();
+        if (queue.isEmpty()) {
+            System.out.println("Cannot run the ride. No visitors in the queue.");
+            return;
+        }
+
+        // 取出游客，最多不超过 maxRiders 个
+        int count = Math.min(maxRiders, queue.size());
+        for (int i = 0; i < count; i++) {
+            Visitor visitor = queue.poll(); // 从队列中移除游客
+            addVisitorToHistory(visitor);   // 将游客添加到历史记录
+        }
+
+        // 增加周期数
+        numOfCycles++;
+        System.out.println("Cycle " + numOfCycles + " completed.");
     }
 
     // 打印历史记录中的所有游客
     public void printRideHistory() {
         System.out.println("Ride History:");
-        Iterator<Visitor> iterator = rideHistory.iterator();
-        while (iterator.hasNext()) {
-            Visitor visitor = iterator.next();
+        for (Visitor visitor : rideHistory) {
             System.out.println(visitor);  // 调用 Visitor 的 toString 方法
         }
     }
 
-    // 运行一个周期：游客从队列中移出并进入历史
-    public void runOneCycle() {
-        if (!queue.isEmpty()) {
-            Visitor visitor = queue.poll();  // 从队列中取出一个游客
-            addVisitorToHistory(visitor);    // 将其加入历史记录
-        } else {
-            System.out.println("No visitors in the queue.");
-        }
-    }
-
-    // 使用迭代器打印队列中的游客
+    // 打印队列中的所有游客
     public void printQueue() {
         System.out.println("Queue:");
-        Iterator<Visitor> iterator = queue.iterator();
-        while (iterator.hasNext()) {
-            Visitor visitor = iterator.next();
+        for (Visitor visitor : queue) {
             System.out.println(visitor);
         }
-    }
-
-    // 排序历史记录：按名字排序（可以根据需要修改排序逻辑）
-    public void sortRideHistory() {
-        Collections.sort(rideHistory, new VisitorComparator());
-        System.out.println("Ride history sorted.");
     }
 
     // getter 和 setter
@@ -99,5 +95,9 @@ public class Ride {
 
     public List<Visitor> getRideHistory() {
         return rideHistory;
+    }
+
+    public int getNumOfCycles() {
+        return numOfCycles;
     }
 }
