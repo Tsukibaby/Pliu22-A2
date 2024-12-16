@@ -103,7 +103,6 @@ public class Ride implements RideInterface {
             System.out.println("No visitors have taken the ride yet.");
         } else {
             System.out.println("Visitors who have taken the ride:");
-
             for (Visitor visitor : rideHistory) {
                 System.out.println(visitor.getName());
             }
