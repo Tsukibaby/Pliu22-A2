@@ -4,14 +4,13 @@ import java.util.*;
 
 public class Ride {
 
-    private final String rideName;          // rideName 应该是不可变的
-    private final int maxRiders;            // maxRiders 每个周期最大游客数
-    private final Employee rideOperator;    // rideOperator 不会变化，可以设置为 final
-    private final Queue<Visitor> queue;     // queue 应该是不可变的
-    private final List<Visitor> rideHistory; // rideHistory 应该是不可变的
-    private int numOfCycles = 0;            // 游乐设施已运行的周期数
+    private final String rideName;
+    private final int maxRiders;
+    private final Employee rideOperator;
+    private final Queue<Visitor> queue;
+    private final List<Visitor> rideHistory;  // Ride history
+    private int numOfCycles = 0;
 
-    // 构造函数
     public Ride(String rideName, int maxRiders, Employee rideOperator) {
         this.rideName = rideName;
         this.maxRiders = maxRiders;
@@ -20,9 +19,9 @@ public class Ride {
         this.rideHistory = new LinkedList<>();
     }
 
-    // 添加游客到队列
+    // Add visitor to the queue
     public void addVisitorToQueue(Visitor visitor) {
-        if (queue.size() < maxRiders * 2) {  // 最大队列容量，可以根据实际需求调整
+        if (queue.size() < maxRiders * 2) {
             queue.add(visitor);
             System.out.println(visitor.getName() + " added to the queue.");
         } else {
@@ -30,15 +29,14 @@ public class Ride {
         }
     }
 
-    // 将游客移到历史记录中
+    // Move visitor to the ride history
     public void addVisitorToHistory(Visitor visitor) {
         rideHistory.add(visitor);
         System.out.println(visitor.getName() + " has taken the ride and added to history.");
     }
 
-    // 运行一个周期：游客从队列中移出并进入历史
+    // Run one cycle
     public void runOneCycle() {
-        // 检查是否有操作员和游客
         if (rideOperator == null) {
             System.out.println("Cannot run the ride. No ride operator assigned.");
             return;
@@ -49,27 +47,25 @@ public class Ride {
             return;
         }
 
-        // 取出游客，最多不超过 maxRiders 个
         int count = Math.min(maxRiders, queue.size());
         for (int i = 0; i < count; i++) {
-            Visitor visitor = queue.poll(); // 从队列中移除游客
-            addVisitorToHistory(visitor);   // 将游客添加到历史记录
+            Visitor visitor = queue.poll();
+            addVisitorToHistory(visitor);
         }
 
-        // 增加周期数
         numOfCycles++;
         System.out.println("Cycle " + numOfCycles + " completed.");
     }
 
-    // 打印历史记录中的所有游客
+    // Print all visitors in the ride history
     public void printRideHistory() {
         System.out.println("Ride History:");
         for (Visitor visitor : rideHistory) {
-            System.out.println(visitor);  // 调用 Visitor 的 toString 方法
+            System.out.println(visitor);  // Call Visitor's toString method
         }
     }
 
-    // 打印队列中的所有游客
+    // Print all visitors in the queue
     public void printQueue() {
         System.out.println("Queue:");
         for (Visitor visitor : queue) {
@@ -77,15 +73,13 @@ public class Ride {
         }
     }
 
-    // 将游客历史记录导出到文件
+    // Export the ride history to a file
     public void exportRideHistory(String filename) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            // 遍历历史记录，写入每个游客信息
             for (Visitor visitor : rideHistory) {
-                // 将游客的详细信息以逗号分隔写入文件
                 writer.write(visitor.getName() + "," + visitor.getAge() + "," + visitor.getGender()
                         + "," + visitor.getTicketType() + "," + visitor.getVisitDate());
-                writer.newLine(); // 每个游客信息占一行
+                writer.newLine();
             }
             System.out.println("Ride history successfully exported to " + filename);
         } catch (IOException e) {
@@ -93,7 +87,39 @@ public class Ride {
         }
     }
 
-    // getter 和 setter
+    // Part 7: Import ride history from a file
+    public void importRideHistory(String filename) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Split by comma
+                String[] visitorData = line.split(",");
+                if (visitorData.length == 5) {
+                    String name = visitorData[0];
+                    int age = Integer.parseInt(visitorData[1]);
+                    String gender = visitorData[2];
+                    String ticketType = visitorData[3];
+                    String visitDate = visitorData[4];
+
+                    // Create Visitor object
+                    Visitor visitor = new Visitor(name, age, gender, ticketType, visitDate);
+
+                    // Add visitor to the ride history
+                    rideHistory.add(visitor);
+                    System.out.println(visitor.getName() + " imported to ride history.");
+                }
+            }
+            System.out.println("Import completed successfully. Total visitors imported: " + rideHistory.size());
+        } catch (FileNotFoundException e) {
+            System.err.println("Error: File not found. Please ensure the file exists.");
+        } catch (IOException e) {
+            System.err.println("Error reading the file: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.err.println("Error parsing data. Make sure the file format is correct.");
+        }
+    }
+
+    // Getter and Setter methods
     public String getRideName() {
         return rideName;
     }

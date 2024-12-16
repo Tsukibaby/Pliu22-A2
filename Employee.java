@@ -1,44 +1,44 @@
 
 public class Employee extends Person {
 
-    private String position;  // 员工职位
-    private double salary;    // 员工薪水
+    private String position;  // Staff position
+    private double salary;    // Employee salary
 
-    // 默认构造函数
+    // Default constructor
     public Employee() {
-        super(); // 调用父类构造函数
-        this.position = "Unknown"; // 默认职位为"未知"
-        this.salary = 0.0;  // 默认薪水为0
+        super(); // Call the parent class constructor
+        this.position = "Unknown"; // Default position is "Unknown"
+        this.salary = 0.0;  // The default salary is 0
     }
 
-    // 带参数的构造函数
+    // A constructor with arguments
     public Employee(String name, int age, String gender, String position, double salary) {
-        super(name, age, gender); // 调用父类构造函数
-        this.position = position; // 设置职位
-        this.salary = salary;     // 设置薪水
+        super(name, age, gender); // Call the parent class constructor
+        this.position = position; // Set up a position
+        this.salary = salary;     // Set salary
     }
 
-    // 获取职位
+    // Get a job
     public String getPosition() {
         return position;
     }
 
-    // 设置职位
+    // Set up a position
     public void setPosition(String position) {
         this.position = position;
     }
 
-    // 获取薪水
+    // Get a salary
     public double getSalary() {
         return salary;
     }
 
-    // 设置薪水
+    // Set salary
     public void setSalary(double salary) {
         this.salary = salary;
     }
 
-    // 重写toString方法，方便打印员工信息
+    // Override the toString method to print employee information
     @Override
     public String toString() {
         return "Employee: " + getName() + ", Age: " + getAge() + ", Gender: " + getGender()

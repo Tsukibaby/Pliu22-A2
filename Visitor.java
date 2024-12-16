@@ -1,44 +1,44 @@
 
 public class Visitor extends Person {
 
-    private String ticketType;
-    private String visitDate;
+    private String ticketType;  // Ticket type (e.g., General, VIP)
+    private String visitDate;   // Date of the visit
 
-    // 默认构造函数
+    // Default constructor
     public Visitor() {
-        super(); // 调用父类构造函数
-        this.ticketType = "General"; // 默认票种为普通票
-        this.visitDate = "Unknown";  // 默认访问日期为未知
+        super(); // Call the parent class constructor
+        this.ticketType = "General"; // Default ticket type is "General"
+        this.visitDate = "Unknown";  // Default visit date is "Unknown"
     }
 
-    // 带参数的构造函数
+    // Parameterized constructor
     public Visitor(String name, int age, String gender, String ticketType, String visitDate) {
-        super(name, age, gender); // 调用父类构造函数
-        this.ticketType = ticketType; // 设置票种
-        this.visitDate = visitDate;  // 设置访问日期
+        super(name, age, gender); // Call the parent class constructor
+        this.ticketType = ticketType; // Set the ticket type
+        this.visitDate = visitDate;  // Set the visit date
     }
 
-    // 获取票种
+    // Get ticket type
     public String getTicketType() {
         return ticketType;
     }
 
-    // 设置票种
+    // Set ticket type
     public void setTicketType(String ticketType) {
         this.ticketType = ticketType;
     }
 
-    // 获取访问日期
+    // Get visit date
     public String getVisitDate() {
         return visitDate;
     }
 
-    // 设置访问日期
+    // Set visit date
     public void setVisitDate(String visitDate) {
         this.visitDate = visitDate;
     }
 
-    // 重写toString方法，方便打印游客信息
+    // Override toString method to print visitor's details
     @Override
     public String toString() {
         return "Visitor: " + getName() + ", Age: " + getAge() + ", Gender: " + getGender()
